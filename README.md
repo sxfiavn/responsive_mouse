@@ -39,7 +39,7 @@ The system also includes a feature that can stop notifications on a user's iMac 
    git clone https://github.com/yourusername/responsive_mouse_project.git
    cd responsive_mouse_project
    ```
-````
+
 
 2. Create a **Conda** environment and install the dependencies:
 
