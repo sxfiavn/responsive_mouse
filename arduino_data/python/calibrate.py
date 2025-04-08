@@ -23,16 +23,6 @@ num_samples = 100  # Number of samples to average for calibration
 ppg_baseline = 0
 gsr_baseline = 0
 
-# ---- Matplotlib Setup ——— #
-# plt.ion()  # Turn on interactive mode for real-time plotting
-# fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 6))  # Create two subplots
-# ax1.set_title("PPG Sensor Calibration")
-# ax1.set_xlabel("Samples")
-# ax1.set_ylabel("PPG Value")
-# ax2.set_title("GSR Sensor Calibration")
-# ax2.set_xlabel("Samples")
-# ax2.set_ylabel("GSR Value")
-
 ppg_values = []
 gsr_values = []
 ppg_smooth_values = []
@@ -73,27 +63,11 @@ with open(filename, 'w', newline='') as csvfile:
                 'GSR_Smoothed': gsr_smooth
             })
 
-            # # Plot the data in real-time
-            # ax1.clear()  # Clear the previous plot
-            # ax2.clear()  # Clear the previous plot
-            # ax1.plot(ppg_values, label="Raw PPG", color='blue')
-            # ax1.plot(ppg_smooth_values, label="Smoothed PPG", color='green')
-            # ax2.plot(gsr_values, label="Raw GSR", color='red')
-            # ax2.plot(gsr_smooth_values, label="Smoothed GSR", color='orange')
-
-            # ax1.legend(loc="upper right")
-            # ax2.legend(loc="upper right")
-
-            # plt.draw()  # Redraw the plot
-            # plt.pause(0.05)  # Pause for a short time to allow plot update
-
     # Calculate average baseline values
     ppg_baseline /= num_samples
     gsr_baseline /= num_samples
 
-# # Final plot display
-# plt.ioff()  # Turn off interactive mode
-# plt.show()
+
 
 print(f"Calibration Complete! Baseline values: PPG: {ppg_baseline}, GSR: {gsr_baseline}")
 
