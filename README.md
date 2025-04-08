@@ -1,23 +1,5 @@
 # responsive_mouse
 
-Great! I'll help you create a **README** for your project. Here's a general structure, and I'll fill in the sections with placeholder information for now. If you'd like me to adjust or add more details, let me know!
-
-### Basic Information I Need from You:
-
-- **Project Title**: The name of your project.
-- **Project Description**: A short description of what your project does and its purpose.
-- **How to Install**: Dependencies or requirements to run the project.
-- **How to Use**: Instructions on how to run the code, e.g., using the `log_data.py` and `calibrate.py` scripts.
-- **Contributors**: Any contributors or collaborators on the project (optional).
-- **Project Status**: Is the project in progress, or is it finished?
-
-Feel free to provide any of these details, or I can fill in the placeholders for now.
-
----
-
-### Sample README for Your Project
-
-````markdown
 ## TODO:
 
 - Edit name and description
@@ -57,7 +39,7 @@ The system also includes a feature that can stop notifications on a user's iMac 
    git clone https://github.com/yourusername/responsive_mouse_project.git
    cd responsive_mouse_project
    ```
-````
+
 
 2. Create a **Conda** environment and install the dependencies:
 
@@ -117,7 +99,7 @@ python plot_data.py
 - **[Ming Dong]** - Design
 - **[Yuxin Ni]** -
 
-## Acknowledgements -- Come back to this?
+## Acknowledgements 
 
 - The sensors used in this project (PPG and GSR) are available through various suppliers and were chosen based on their accessibility and ease of use with Arduino.
 - This project was submitted as part of the [2025 IHIET - Human Interaction & Emerging Technologies conference] (https://www.ihiet.org/index-ihiet.html) as a proof of concept of a biofeedback based stress mitigation system.
