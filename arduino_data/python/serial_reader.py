@@ -4,6 +4,7 @@ import time
 from config import SERIAL_PORT, BAUD_RATE
 
 # Class reads and prints data from Arduino in real-time
+
 # Serial port and baud rate are defined in config.py
 # param SERIAL_PORT: str
 # param BAUD_RATE: int

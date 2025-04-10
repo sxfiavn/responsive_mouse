@@ -1,80 +1,76 @@
 import serial
 import time
-import sys
 import csv
+import os
 from config import SERIAL_PORT, BAUD_RATE
-# import matplotlib.pyplot as plt
-from utils import MovingAverage
 
-# ---- Configuration ——— #
-ppg_smoother = MovingAverage(10)
-gsr_smoother = MovingAverage(10)
-
-# ---- Serial Port Setup ——— #
+# ---- Serial Port Setup ---- #
 ser = serial.Serial(SERIAL_PORT, BAUD_RATE)
-time.sleep(2)  # Allow some time for Arduino to start up
+time.sleep(2)  # Allow time for Arduino to reset
 
-# ---- Calibration Setup ——— #
-print("Starting calibration. Please ensure that the hand is off the sensors.")
-input("Press Enter when ready to start calibration...")
+# ---- Settings ---- #
+num_samples = 100
+filename_csv = "calibration_data.csv"
+filename_txt = "calibration_data.txt"
 
-# Collect baseline data
-num_samples = 100  # Number of samples to average for calibration
-ppg_baseline = 0
-gsr_baseline = 0
+def collect_samples(phase_name):
+    print(f"\nStarting {phase_name} calibration...")
+    print(f"Collecting {num_samples} samples...")
+    
+    ppg_total = 0
+    gsr_total = 0
+    ppg_values = []
+    gsr_values = []
 
-ppg_values = []
-gsr_values = []
-ppg_smooth_values = []
-gsr_smooth_values = []
-
-# Open CSV file to save calibration data
-filename = "calibration_data.csv"
-with open(filename, 'w', newline='') as csvfile:
-    fieldnames = ['Sample', 'PPG_Raw', 'PPG_Smoothed', 'GSR_Raw', 'GSR_Smoothed']
-    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-    writer.writeheader()  # Write the header to the CSV
-
-    print(f"Collecting {num_samples} samples for calibration...")
-
-    # Collect and plot sensor data
     for i in range(num_samples):
         line = ser.readline().decode().strip()
         if "," in line:
-            ppg_raw, gsr_raw = map(int, line.split(","))
-            ppg_baseline += ppg_raw
-            gsr_baseline += gsr_raw
+            try:
+                ppg_raw, gsr_raw = map(int, line.split(","))
+                ppg_total += ppg_raw
+                gsr_total += gsr_raw
+                ppg_values.append(ppg_raw)
+                gsr_values.append(gsr_raw)
 
-            ppg_smooth = ppg_smoother.update(ppg_raw)
-            gsr_smooth = gsr_smoother.update(gsr_raw)
+                with open(filename_csv, 'a', newline='') as csvfile:
+                    writer = csv.writer(csvfile)
+                    writer.writerow([phase_name, i + 1, ppg_raw, gsr_raw])
 
-            # Add the raw and smoothed values to the lists for plotting
-            ppg_values.append(ppg_raw)
-            gsr_values.append(gsr_raw)
-            ppg_smooth_values.append(ppg_smooth)
-            gsr_smooth_values.append(gsr_smooth)
+            except ValueError:
+                continue  # skip malformed line
 
-            # Write the data to the CSV file
-            writer.writerow({
-                'Sample': i + 1,
-                'PPG_Raw': ppg_raw,
-                'PPG_Smoothed': ppg_smooth,
-                'GSR_Raw': gsr_raw,
-                'GSR_Smoothed': gsr_smooth
-            })
+    ppg_avg = ppg_total / num_samples
+    gsr_avg = gsr_total / num_samples
 
-    # Calculate average baseline values
-    ppg_baseline /= num_samples
-    gsr_baseline /= num_samples
+    print(f"{phase_name} Calibration Complete!")
+    print(f"PPG: {ppg_avg:.2f}, GSR: {gsr_avg:.2f}")
+
+    return ppg_avg, gsr_avg
 
 
+# ---- Setup Files ---- #
+# Create or clear CSV file
+with open(filename_csv, 'w', newline='') as csvfile:
+    writer = csv.writer(csvfile)
+    writer.writerow(["Phase", "Sample", "PPG_Raw", "GSR_Raw"])
 
-print(f"Calibration Complete! Baseline values: PPG: {ppg_baseline}, GSR: {gsr_baseline}")
+# ---- Phase 1: Hands OFF ---- #
+print("PHASE 1: Please remove your hand from the mouse/sensors.")
+input("Press Enter when ready to start hands-off calibration...")
+ppg_off, gsr_off = collect_samples("Hands_Off")
 
-# Save calibration data to a file for future use
-with open("calibration_data.txt", 'w') as f:
-    f.write(f"PPG Baseline: {ppg_baseline}\n")
-    f.write(f"GSR Baseline: {gsr_baseline}\n")
+# ---- Phase 2: Hands ON ---- #
+print("\nPHASE 2: Place your hand naturally on the mouse/sensors.")
+input("Press Enter when ready to start hands-on calibration...")
+ppg_on, gsr_on = collect_samples("Hands_On")
 
-print(f"Calibration data saved to 'calibration_data.txt' and 'calibration_data.csv'. You can now use these values to adjust the sensor readings.")
+# ---- Save Baseline Summary ---- #
+with open(filename_txt, 'w') as f:
+    f.write("Sensor Calibration Results:\n")
+    f.write(f"PPG (hands off): {ppg_off:.2f}\n")
+    f.write(f"PPG (resting hand on): {ppg_on:.2f}\n")
+    f.write(f"GSR (hands off): {gsr_off:.2f}\n")
+    f.write(f"GSR (resting hand on): {gsr_on:.2f}\n")
+
+print(f"\n✅ Calibration complete. Data saved to:\n- {filename_csv}\n- {filename_txt}")
 ser.close()
