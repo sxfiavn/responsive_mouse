@@ -25,3 +25,5 @@ except KeyboardInterrupt:
     print("Stopped.")
 finally:
     ser.close()
+
+#TODO: add code to stop reading when clicking something on keyboard

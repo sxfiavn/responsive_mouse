@@ -27,10 +27,10 @@ with open(filename, 'w', newline='') as f:
         while True:
             line = ser.readline().decode().strip()
             if "," in line:
-                timestep = round(time.time() - start_time, 2)
+                timestep = round(time.time() - start_time, 3)
                 ppg_raw, gsr_raw = map(int, line.split(","))
 
-                writer.writerow([timestep, ppg_raw, ppg_smooth, gsr_raw, gsr_smooth, LABEL])
+                writer.writerow([timestep, ppg_raw, gsr_raw, LABEL])
                 print(f"{timestep} | PPG: {ppg_raw} | GSR: {gsr_raw}")
 
                 if DURATION and time.time() - start_time > DURATION:

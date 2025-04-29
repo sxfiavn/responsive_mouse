@@ -1,1 +1,6 @@
-/arduino_data/data
+# Calibration files
+# calibration_data.csv
+# calibration_data.txt
+
+# Logged trial data
+arduino_data/data/
