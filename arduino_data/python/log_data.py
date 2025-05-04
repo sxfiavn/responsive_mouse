@@ -10,11 +10,16 @@ participant_id = input("Enter Participant ID: ")
 label = input("Enter the Label (e.g., 'resting', 'stressed'): ")
 trial = input("Enter the Trial Number/Name (e.g., 'trial1', 'trial2'): ")
 
+directory = "../data"
+os.makedirs(directory, exist_ok=True)  # Ensure the directory exists
+
 # Generate the filename using the inputs and trial time
 filename = f"../data/{participant_id}_{label}_{trial}.csv"
 
 # ---- Serial Port Setup ——— #
-ser = serial.Serial(SERIAL_PORT, BAUD_RATE)
+# ser = serial.Serial(SERIAL_PORT, BAUD_RATE)
+ser = serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=1)
+# Wait for the serial connection to establish
 time.sleep(2)
 
 start_time = time.time()
