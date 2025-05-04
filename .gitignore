@@ -1,6 +1,7 @@
+arduino_data/python/__pycache__
 # Calibration files
-# calibration_data.csv
-# calibration_data.txt
+arduino_data/python/calibration_data.txt
+arduino_data/python/calibration_data.csv
 
 # Logged trial data
 arduino_data/data/
