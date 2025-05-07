@@ -25,8 +25,13 @@ from intervention.monitor_stress import start_monitoring
 # screens/*.py (UI views)
 
 class MainApp(tk.Tk):
-    def __init__(self):
+    def __init__(self, participant_id="anon", trial="default", session_path="experiment_data/temp"):
         super().__init__()
+
+        self.participant_id = participant_id
+        self.trial = trial
+        self.session_path = session_path
+
         self.title("Stress Intervention")
         self.geometry("600x230")
         self.configure(bg="#96C494")
@@ -88,7 +93,6 @@ class MainApp(tk.Tk):
         )
         start_btn.pack(pady=20)
         
-
 
         # Thread and sensor initialization
 

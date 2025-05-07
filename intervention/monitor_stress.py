@@ -36,7 +36,7 @@ def start_monitoring(buffer, ui_reference, on_stress_callback, should_continue_f
             if result == "stressed":
                 print("Stress detected!")
                 logging.info("Stress detected! Triggering intervention.")
-                
+
                 current_time = time.time()
                 last_trigger = getattr(ui_reference, "last_intervention_time", 0)
 
@@ -44,6 +44,7 @@ def start_monitoring(buffer, ui_reference, on_stress_callback, should_continue_f
                     logging.info("Enough time passed. Triggering intervention.")
                     ui_reference.after(0, on_stress_callback)
                 else:
+                    print("Too soon for another intervention.")
                     logging.info("Too soon for another intervention.")
 
         except Exception as e:
