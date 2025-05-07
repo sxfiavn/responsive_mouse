@@ -7,3 +7,5 @@ arduino_data/python/calibration_data.csv
 arduino_data/data/
 
 .DS_Store
+
+__pycache__

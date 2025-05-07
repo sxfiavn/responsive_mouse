@@ -35,25 +35,19 @@ The system also includes a feature that can stop notifications on a user's iMac 
 ## Installation
 
 1. Clone this repository:
+
    ```bash
    git clone https://github.com/yourusername/responsive_mouse_project.git
    cd responsive_mouse_project
    ```
 
-
 2. Create a **Conda** environment and install the dependencies:
 
    ```bash
-   conda create --name responsive_mouse_env python=3.8
+   conda create --name responsive_mouse_env python=3.13
    conda activate responsive_mouse_env
    pip install -r requirements.txt
    ```
-
-3. **Dependencies**:
-   - `pyserial`: For serial communication with the Arduino.
-   - `numpy`: For data processing.
-   - `matplotlib`: (optional) For visualization.
-   - `scikit-learn`: For machine learning models (if applicable).
 
 ## Usage
 
@@ -99,7 +93,7 @@ python plot_data.py
 - **[Ming Dong]** - Design
 - **[Yuxin Ni]** -
 
-## Acknowledgements 
+## Acknowledgements
 
 - The sensors used in this project (PPG and GSR) are available through various suppliers and were chosen based on their accessibility and ease of use with Arduino.
 - This project was submitted as part of the [2025 IHIET - Human Interaction & Emerging Technologies conference] (https://www.ihiet.org/index-ihiet.html) as a proof of concept of a biofeedback based stress mitigation system.
