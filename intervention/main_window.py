@@ -1,6 +1,7 @@
 import tkinter as tk
 import threading
 import random
+import time
 from collections import deque
 from intervention.screens.intro_screen import IntroScreen
 from intervention.screens.breathing_ui import BreathingScreen
@@ -44,6 +45,8 @@ class MainApp(tk.Tk):
 
         # Flag to check if monitoring is active
         self.sensor_thread_started = False
+
+        self.last_intervention_time = 0
 
 
     def background_activity(self, name, text):
@@ -136,7 +139,7 @@ class MainApp(tk.Tk):
         im_ready_btn = tk.Button(
             btn_frame,
             image=im_ready_img,
-            command=self.curr_command,
+            command=self.on_user_confirmed_ready,
             borderwidth=0,
             highlightthickness=0,
             bg="#96C494",
@@ -158,6 +161,12 @@ class MainApp(tk.Tk):
         im_not_ready_btn.pack(pady=5)
 
 
+    def on_user_confirmed_ready(self):
+        # Update the timestamp
+        self.last_intervention_time = time.time()
+
+        # Call whatever the next screen is
+        self.curr_command()
 
     def go_to_breathing(self):
 
