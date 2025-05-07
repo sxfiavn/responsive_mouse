@@ -1,6 +1,7 @@
 
 import time
 from model.stress_model import run_model  # TODO: Imported from stress_model.py
+from config import INTERVENTION_INTERVAL_SEC
 
 def start_monitoring(buffer, ui_reference, on_stress_callback, should_continue_fn, interval=10):
     import logging
@@ -35,7 +36,15 @@ def start_monitoring(buffer, ui_reference, on_stress_callback, should_continue_f
             if result == "stressed":
                 print("Stress detected!")
                 logging.info("Stress detected! Triggering intervention.")
-                ui_reference.after(0, on_stress_callback)
+                
+                current_time = time.time()
+                last_trigger = getattr(ui_reference, "last_intervention_time", 0)
+
+                if current_time - last_trigger >= INTERVENTION_INTERVAL_SEC: 
+                    logging.info("Enough time passed. Triggering intervention.")
+                    ui_reference.after(0, on_stress_callback)
+                else:
+                    logging.info("Too soon for another intervention.")
 
         except Exception as e:
             print(f"[Monitor Error] {e}")

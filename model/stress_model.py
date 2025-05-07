@@ -11,7 +11,7 @@ from config import USE_MOCK_MODEL
 
 if not USE_MOCK_MODEL:
     import joblib
-    model = joblib.load("model/stress_classifier.pkl")
+    model = joblib.load("model/stress_classifier2.pkl")
 else:
     # Mocked model
     class MockModel:
