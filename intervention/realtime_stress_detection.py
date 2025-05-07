@@ -1,3 +1,5 @@
+# OUTDATED SCRIPT - DO NOT USE
+
 import csv
 import time
 import joblib

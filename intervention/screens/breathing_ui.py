@@ -9,9 +9,39 @@ class BreathingScreen(tk.Frame):
         # resize window
         controller.geometry("1400x800") 
 
+        # Create a label for the welcome message
+        self.welcome_label = tk.Label(self, text="Welcome to the Breathing Exercise", font=("Quicksand", 20), bg="#524A8F", fg="white")
+        self.welcome_label.pack(pady=20)
+
+        # Create a label for the instructions
+        self.instructions_label = tk.Label(self, text="We'll start with some breathing exercises. Just follow the instructions on the screen", font=("Quicksand", 16), bg="#524A8F", fg="white")
+        self.instructions_label.pack(pady=30)
+
+        # Create a button to start the exercise
+        # note: currently uses text, not image
+        self.im_ready_img = load_image("assets/im_ready_button_p.png", size=(350, 100))
+        self.im_ready_btn = tk.Button(
+            self,  
+            image=self.im_ready_img,
+            command=self.start_breathing_exercise,
+            borderwidth=0,
+            highlightthickness=0,
+            bg="#96C494",
+            activebackground="#96C494",
+            relief="flat"
+        )
+        #self.im_ready_btn.image = im_ready_img
+        self.im_ready_btn.pack()
+
+    def start_breathing_exercise(self):
+        # Destroy the welcome label and button
+        self.welcome_label.destroy()
+        self.im_ready_btn.destroy()
+        self.instructions_label.destroy()
+
         # Instruction text
         self.header = tk.Label(self, text="Let’s take some deep breaths.",
-                               font=("Quicksand", 14), bg="#524A8F", fg="white")
+                               font=("Quicksand", 20), bg="#524A8F", fg="white")
         self.header.pack(pady=30)
 
         # Breathing phase label
@@ -35,7 +65,7 @@ class BreathingScreen(tk.Frame):
 
     def run_breathing_cycle(self):
 
-        if self.cycle_count >= 1: #self.max_cycles:
+        if self.cycle_count >= self.max_cycles:
 
             # Stop the breathing exercise
             self.canvas.destroy()  # Remove the canvas

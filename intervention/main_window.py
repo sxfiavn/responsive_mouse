@@ -27,7 +27,7 @@ class MainApp(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("Stress Intervention")
-        self.geometry("600x200")
+        self.geometry("600x230")
         self.configure(bg="#96C494")
         self.resizable(False, False)
         self.buffer = deque(maxlen=500)  # 10s @ 50Hz
@@ -47,10 +47,14 @@ class MainApp(tk.Tk):
 
 
     def background_activity(self, name, text):
+
+        for widget in self.container.winfo_children():
+            widget.destroy()
+        
         self.name.set(name) # Set the name variable
 
         # make window big enough to only show the message
-        self.geometry("600x200")
+        self.geometry("600x230")
 
         # Create the main screen UI
         welcoming = text + " " + name + "!"
@@ -80,6 +84,7 @@ class MainApp(tk.Tk):
             relief="flat"        # Flat button for modern look
         )
         start_btn.pack(pady=20)
+        
 
 
         # Thread and sensor initialization
@@ -124,16 +129,12 @@ class MainApp(tk.Tk):
         label = tk.Label(self.container, text=msg, font=("Quicksand", 14), fg="white", bg="#96C494", wraplength=400, justify="center")
         label.pack(pady=10)
 
-
         btn_frame = tk.Frame(self.container, bg="#96C494")
-        btn_frame.pack(
-            pady=0,
-            expand=False
-        )
+        btn_frame.pack(pady=0, expand=False)
 
-        im_ready_img = load_image("assets/im_ready_button1.png", size=(350, 100))
+        im_ready_img = load_image("assets/im_ready_button_g.png", size=(350, 100))
         im_ready_btn = tk.Button(
-            btn_frame,  
+            btn_frame,
             image=im_ready_img,
             command=self.curr_command,
             borderwidth=0,
@@ -142,12 +143,20 @@ class MainApp(tk.Tk):
             activebackground="#96C494",
             relief="flat"
         )
-        im_ready_btn.image = im_ready_img
+        #im_ready_btn.image = im_ready_img
         im_ready_btn.pack()
 
-        # TODO: add a button to "I'm not ready yet" that goes back to the main screen
-        im_not_ready_btn = tk.Button(btn_frame, text="I'm not ready yet", command=self.background_activity)
-        im_not_ready_btn.pack(0)
+
+        im_not_ready_btn = tk.Button(
+            btn_frame,
+            text="I'm not ready yet",
+            command=lambda: self.background_activity(self.name.get(), "Welcome Back, "),
+            font=("Quicksand", 12),
+            bg="#96C494",
+            fg="black"
+        )
+        im_not_ready_btn.pack(pady=5)
+
 
 
     def go_to_breathing(self):
