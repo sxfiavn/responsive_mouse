@@ -1,5 +1,46 @@
 
-# This file will get output from machine learning model
-# Make sure that enough time has gone by since the last intervention (if applicable)
-# if its time for a new intervention, run disable_notifications.py and the UI prompt code
-# if not, wait until the 45 minutes have passed, make call to ML model again, check if intervention is needed and execute file if so
+import time
+from model.stress_model import run_model  # TODO: Imported from stress_model.py
+
+def start_monitoring(buffer, ui_reference, on_stress_callback, should_continue_fn, interval=10):
+    import logging
+    logging.info("Stress monitoring started")
+
+    while should_continue_fn():
+        try:
+            time.sleep(interval)
+            now = time.time()
+
+            # Optional: bail early after sleep, in case we were stopped during sleep
+            if not should_continue_fn():
+                print("Skipping result: user exited before inference finished")
+                break
+
+            recent_data = [
+                (ppg, gsr, t) for (ppg, gsr, t) in list(buffer)
+                if now - t <= interval
+            ]
+
+            if len(recent_data) < 250:
+                continue
+
+            result = run_model(recent_data)
+
+            # Check again here — ignore result if user navigated away
+            if not should_continue_fn():
+                print("Skipping result: user exited before inference finished")
+                logging.info("Skipping result: user exited before inference finished")
+                break
+
+            if result == "stressed":
+                print("Stress detected!")
+                logging.info("Stress detected! Triggering intervention.")
+                ui_reference.after(0, on_stress_callback)
+
+        except Exception as e:
+            print(f"[Monitor Error] {e}")
+            logging.error(f"[Monitor Error] {e}")
+            break
+
+    logging.info("Monitoring thread exited.")
+

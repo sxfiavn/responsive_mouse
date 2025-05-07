@@ -7,6 +7,9 @@ from sklearn.preprocessing import StandardScaler
 from scipy.stats import mode
 from collections import Counter
 
+# Description:
+# Role: Backend logic for ML model prediction
+
 # Load trained model (ensure this path is correct) (replace this if we update model)
 model = joblib.load("../model/stress_classifier.pkl")
 

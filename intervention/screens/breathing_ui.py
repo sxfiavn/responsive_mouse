@@ -1,12 +1,13 @@
 import tkinter as tk
+from assets.create_assets import load_image
 
 class BreathingScreen(tk.Frame):
-    def __init__(self, parent):
+    def __init__(self, parent, controller):
         super().__init__(parent, bg="#524A8F")
-        # Close button
-        close_btn = tk.Button(self, text="✕", command=self.destroy,
-                              bg="#524A8F", fg="white", bd=0, font=("Quicksand", 12))
-        close_btn.place(x=570, y=10)
+        self.controller = controller  # this is MainApp
+
+        # resize window
+        controller.geometry("1400x800") 
 
         # Instruction text
         self.header = tk.Label(self, text="Let’s take some deep breaths.",
@@ -28,14 +29,33 @@ class BreathingScreen(tk.Frame):
         self.cycle_count = 0
         self.max_cycles = 4
 
-        self.after(0, self.run_breathing_cycle)
+        # Start the breathing exercise
+        self.breath_label.config(text="We'll start in 5 seconds...")
+        self.after(5000, self.run_breathing_cycle)
 
     def run_breathing_cycle(self):
-        if self.cycle_count >= self.max_cycles:
-            self.breath_label.config(text="Done 🎉")
-            return
 
-        if self.state == "in":
+        if self.cycle_count >= 1: #self.max_cycles:
+
+            # Stop the breathing exercise
+            self.canvas.destroy()  # Remove the canvas
+            self.header.config(text="Breathing exercise complete.")
+            self.breath_label.config(text="How do you feel?")
+
+            # TODO: fix button UI
+            # Button to "I'm ready to go back to my work"
+            go_back_btn = tk.Button(self, text="I'm ready to go back to my work", command=self.go_back,
+                                   font=("Quicksand", 12), bg="#524A8F", fg="black")
+            go_back_btn.pack(pady=5)   
+
+            # TODO: fix button UI
+            # Button to "I want to do another exercise"
+            another_exercise_btn = tk.Button(self, text="I want to do another exercise", command=self.controller.go_to_grounding,
+                                   font=("Quicksand", 12), bg="#524A8F", fg="black")
+            another_exercise_btn.pack(pady=5)
+            return
+        
+        elif self.state == "in":
             self.breath_label.config(text="Breathe in")
             self.animate_pulse(expanding=True)
             self.state = "out"
@@ -52,7 +72,7 @@ class BreathingScreen(tk.Frame):
         start = 30 if expanding else 70
         end = 70 if expanding else 30
         steps = 20
-        delay = 50
+        delay = 80
         delta = (end - start) / steps
 
         def step(i=0):
@@ -67,6 +87,13 @@ class BreathingScreen(tk.Frame):
             self.after(delay, step, i + 1)
 
         step()
+
+    def go_back(self):
+        # go back to main screen to
+        name = self.controller.name.get()
+        self.controller.background_activity(name, f"Welcome Back, ")
+        self.destroy()
+
 
 if __name__ == "__main__":
     app = BreathingScreen()
