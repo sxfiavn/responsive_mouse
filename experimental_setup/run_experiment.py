@@ -4,6 +4,24 @@ import subprocess
 import time
 from datetime import datetime
 import serial
+import random
+
+
+class DummySerial:
+    def __init__(self, *args, **kwargs):
+        self.start_time = time.time()
+
+    def readline(self):
+        # Simulate a short delay like a real sensor
+        time.sleep(0.1)
+        # Simulate sensor output: "ppg,gsr"
+        ppg = random.randint(60, 100)
+        gsr = random.randint(200, 800)
+        return f"{ppg},{gsr}\n".encode()
+
+    def close(self):
+        pass
+
 
 def get_participant_metadata():
     # Prompt for participant ID and trial label
@@ -17,7 +35,9 @@ def get_participant_metadata():
     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 
     # Create folder
-    session_path = f"experiment_data/{pid}/{trial}_{timestamp}"
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    session_path = os.path.join(BASE_DIR, "..", "experiment_data", pid, f"{trial}_{timestamp}")
+
     os.makedirs(session_path, exist_ok=True)
 
     return pid, trial, session_path
@@ -53,7 +73,8 @@ def baseline_check(pid, session_path):
     
     # Start reading from serial
     port = "/dev/cu.usbmodem744DBD9FD0942"  # ← adjust your actual port
-    ser = serial.Serial(port, 115200)
+    # ser = serial.Serial(port, 115200)
+    ser = DummySerial()
 
     log_path = os.path.join(session_path, "baseline_data.csv")
     with open(log_path, "w") as f:
