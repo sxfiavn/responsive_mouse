@@ -45,9 +45,10 @@ def baseline_check(pid, session_path):
     print("You can start the baseline check now.")
     print("You have 10 seconds to prepare. Press Enter to start the countdown.")
     input()  # Wait for the researcher to press Enter
-    for i in range(10, 0, -1):
+    for i in range(5, 0, -1):
         print(f"Starting in {i} seconds...", end="\r")
         time.sleep(1)
+    
     print("\nBaseline check started. Please wait...")
     
     # Start reading from serial
@@ -64,7 +65,10 @@ def baseline_check(pid, session_path):
                 ppg, gsr = map(int, line.split(","))
                 f.write(f"{time.time()},{ppg},{gsr}\n")
             except Exception:
+                print("Error reading from serial port. Please check the connection.")
                 continue
+
+        
     
     print("Baseline check complete.")
 
