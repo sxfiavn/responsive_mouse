@@ -49,7 +49,6 @@ def baseline_check(pid, session_path):
         print(f"Starting in {i} seconds...", end="\r")
         time.sleep(1)
     print("\nBaseline check started. Please wait...")
-    print("\nBaseline check started. Please wait...")
     
     # Start reading from serial
     port = "/dev/cu.usbmodem744DBD9FD0942"  # ← adjust your actual port
@@ -66,8 +65,6 @@ def baseline_check(pid, session_path):
                 f.write(f"{time.time()},{ppg},{gsr}\n")
             except Exception:
                 continue
-
-    print("Baseline check complete.")
     
     print("Baseline check complete.")
 
@@ -104,10 +101,22 @@ if __name__ == "__main__":
 # This script is designed to run the experiment setup, including participant metadata collection,
 # baseline check, and UI session. It logs events to a file and handles user input for confirmation.
 
-# instructions to run the experiment:
-# Open new terminal
-# Paste (without quotations): "cd Desktop/responsive_mouse"
-# Paste (without quotations): "python experimental_setup/run_experiment.py"
-# 1. run the script, for trial input: "baseline", store the participant id
-# 2. run the script, for trial input: "intervention1", use the participant id we stored
-# 3. run the script, for trial input: "intervention2", use the participant id we stored
+# Setting up the experiment:
+# 1. Open new terminal
+# 2. Paste (without quotations): "cd Desktop/responsive_mouse"
+
+# Baseline:
+# 1. run the script: "python experimental_setup/run_experiment.py"
+# 2. leave participant id blank -> store the response in a sticky note
+# 3. for trial input (without the quotations): "baseline"
+# 4. Press "y" and Enter to confirm the baseline check 
+# 5. once the participant is ready, press Enter to start the countdown for baseline check (10 seconds)
+# 6. wait for the script to finish
+
+# Intervention (for both intervention1 and intervention2):
+# 1. run the script: "python experimental_setup/run_experiment.py"
+# 2. paste the participant id we stored in the sticky note
+# 3. for trial input (without the quotations): "intervention1"
+# 4. Press "y" and Enter to confirm the intervention check
+# 5. Intervention screen will open, let participant interact with it
+# 6. Once done, close the "Stress Intervention" window

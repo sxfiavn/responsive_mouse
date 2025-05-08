@@ -5,6 +5,7 @@ from config import INTERVENTION_INTERVAL_SEC
 
 def start_monitoring(buffer, ui_reference, on_stress_callback, should_continue_fn, interval=10):
     import logging
+    time.sleep(60) #delay until the first stress detection, gives user time to get settled
     logging.info("Stress monitoring started")
 
     while should_continue_fn():
@@ -25,6 +26,8 @@ def start_monitoring(buffer, ui_reference, on_stress_callback, should_continue_f
             if len(recent_data) < 250:
                 continue
 
+            # Create folder and csv for logging
+            log_path="experiment_data/PID_xxx/trial1/model_output.csv"
             result = run_model(recent_data)
 
             # Check again here — ignore result if user navigated away

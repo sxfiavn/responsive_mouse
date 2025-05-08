@@ -83,7 +83,7 @@ def preprocess_and_extract_features(data, window_size=250):
     return pd.DataFrame(features_list)
 
 
-def run_model(raw_buffer):
+def run_model(raw_buffer, log_path=None):
     df = pd.DataFrame(raw_buffer, columns=["ppg_raw", "gsr_raw", "timestamp"])
     df = df[["ppg_raw", "gsr_raw"]]
 
